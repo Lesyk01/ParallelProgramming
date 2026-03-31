@@ -1,24 +1,28 @@
-custom_power = lambda x=0, /, e=1: x ** e
+import time
+import tracemalloc
 
+def performance(func):
+    if not hasattr(performance, "counter"):
+        performance.counter = 0
+        performance.total_time = 0.0
+        performance.total_mem = 0
 
-def custom_equation(x: int = 0, y: int = 0, /,
-                    a: int = 1, b: int = 1, *,
-                    c: int = 1) -> float:
-
-
-    for val in (x, y, a, b, c):
-        if not isinstance(val, int):
-            raise TypeError("Arguments must be integers")
-
-    return float((x ** a + y ** b) / c)
-
-
-def fn_w_counter() -> (int, dict[str, int]):
-    if not hasattr(fn_w_counter, "count"):
-        fn_w_counter.count = 0
-
-    fn_w_counter.count += 1
-
-    module_name = __name__.split('.')[-1]
-
-    return fn_w_counter.count, {module_name: fn_w_counter.count}
+    def wrapper(*args, **kwargs):
+        tracemalloc.start()
+        start_time = time.perf_counter()
+        
+        result = func(*args, **kwargs)
+        
+        end_time = time.perf_counter()
+        elapsed_time = end_time - start_time
+        
+        current_mem, peak_mem = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+        
+        performance.counter += 1
+        performance.total_time += elapsed_time
+        performance.total_mem += peak_mem
+        
+        return result
+        
+    return wrapper
