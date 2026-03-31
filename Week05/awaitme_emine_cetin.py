@@ -1,7 +1,7 @@
 import functools
 import asyncio
 
-def make_coroutine(func):
+def awaitme(func):
     @functools.wraps(func)
     async def wrapper(*args, **kwargs):
         if asyncio.iscoroutinefunction(func):
