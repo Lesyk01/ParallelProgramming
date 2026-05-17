@@ -1,9 +1,13 @@
 import time
 import tracemalloc
+from functools import wraps
 
 def performance(func):
     """A decorator to measure the performance of a function."""
     
+    # This line protects the identity of the function being decorated
+    # and stops pytest from crashing during collection!
+    @wraps(func)
     def wrapper(*args, **kwargs):
         # Safely start tracemalloc
         was_tracing = tracemalloc.is_tracing()
@@ -22,7 +26,7 @@ def performance(func):
         if not was_tracing:
             tracemalloc.stop()
             
-        # VERY IMPORTANT: Attach the stats to 'performance', NOT 'wrapper'
+        # Attach the stats to 'performance', NOT 'wrapper'
         performance.counter += 1
         performance.total_time += (end_time - start_time)
         performance.total_mem += peak_mem
@@ -31,7 +35,7 @@ def performance(func):
 
     return wrapper
 
-# Initialize the attributes on the decorator itself so the grading script finds them
+# Initialize the attributes on the decorator itself
 performance.counter = 0
 performance.total_time = 0.0
 performance.total_mem = 0
