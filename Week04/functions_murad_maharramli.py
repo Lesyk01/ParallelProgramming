@@ -32,7 +32,7 @@ def custom_equation(x: int = 0, y: int = 0, /, a: int = 1, b: int = 1, *, c: int
 
 # 3. fn_w_counter
 # Returns a tuple of an int (total calls) and a dictionary (caller tracking)[cite: 819, 820].
-def fn_w_counter() -> tuple[int, dict[str, int]]:
+def fn_w_counter() -> (int, dict[str, int]):
     # Initialize function attributes if they don't exist yet
     if not hasattr(fn_w_counter, "total_calls"):
         fn_w_counter.total_calls = 0
