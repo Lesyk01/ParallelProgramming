@@ -15,10 +15,10 @@ def custom_equation(
 
     :param x: first number
     :param y: second number
-    :param a: coefficient for x
-    :param b: coefficient for y
+    :param a: additional parameter
+    :param b: power value
     :param c: divisor
-    :return: result of equation
+    :return: result of custom equation
     """
 
     values = [x, y, a, b, c]
@@ -27,7 +27,7 @@ def custom_equation(
         if not isinstance(value, int):
             raise TypeError("value must be int")
 
-    return (x * a + y * b) / c
+    return (x + y ** b) / c
 
 
 counter = 0
