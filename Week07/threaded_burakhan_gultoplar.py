@@ -1,20 +1,29 @@
 import threading
-from functools import wraps
 
-def eszamanli_calistir(thread_sayisi: int):
+from functools import wraps
+def threaded(n: int):
+
     def decorator(func):
+
         @wraps(func)
+
         def wrapper(*args, **kwargs):
-            is parcaciklari = [
-                threading.Thread(target=func, args=args, kwargs=kwargs)
-                for _ in range(thread_sayisi)
-            ]
+
+            threads = []
+            for _ in range(n):
+
+                t = threading.Thread(target=func, args=args, kwargs=kwargs)
+
+                threads.append(t)
             
-            for t in is_parcaciklari:
-                t.start()
-                
-            for t in is_parcaciklari:
+            for t in threads:
+
+                t.start()            
+
+            for t in threads:
+
                 t.join()
                 
         return wrapper
+
     return decorator
